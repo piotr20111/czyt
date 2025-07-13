@@ -3,843 +3,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VoiceFlow Pro - Profesjonalna zamiana tekstu na mowę</title>
+    <title>Profesjonalna zamiana tekstu na mowę</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
-    <div class="app-wrapper">
-        <!-- Loading Screen -->
-        <div id="loading-screen" class="loading-screen">
-            <div class="loader">
-                <div class="loader-inner"></div>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-microphone-alt"></i> TTS Pro</h2>
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
-            <h2>VoiceFlow Pro</h2>
-            <p>Ładowanie aplikacji...</p>
-        </div>
+            
+            <nav class="sidebar-nav">
+                <button class="nav-btn active" data-section="main">
+                    <i class="fas fa-home"></i>
+                    <span>Główna</span>
+                </button>
+                <button class="nav-btn" data-section="voices">
+                    <i class="fas fa-user-voice"></i>
+                    <span>Głosy</span>
+                </button>
+                <button class="nav-btn" data-section="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Ustawienia</span>
+                </button>
+                <button class="nav-btn" data-section="import">
+                    <i class="fas fa-file-import"></i>
+                    <span>Import</span>
+                </button>
+            </nav>
 
-        <!-- Security Modal -->
-        <div id="security-modal" class="modal security-modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2><i class="fas fa-shield-alt"></i> Żądanie dostępu</h2>
-                </div>
-                <div class="modal-body">
-                    <div class="security-icon">
-                        <i class="fas fa-lock"></i>
-                    </div>
-                    <h3>Plik zabezpieczony</h3>
-                    <p>Ten plik PDF jest zabezpieczony lub zawiera treści prywatne.</p>
-                    <p>Czy zezwalasz aplikacji VoiceFlow Pro na dostęp do tego pliku?</p>
-                    <div class="security-info">
-                        <div class="info-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Plik będzie przetwarzany lokalnie</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Dane nie są wysyłane na serwer</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Pełna kontrola nad prywatnością</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="control-btn" id="deny-access">
-                        <i class="fas fa-times"></i> Odmów
-                    </button>
-                    <button class="control-btn primary" id="grant-access">
-                        <i class="fas fa-check"></i> Zezwól na dostęp
-                    </button>
+            <div class="sidebar-footer">
+                <div class="theme-switch-wrapper">
+                    <input type="checkbox" id="theme-toggle" class="theme-switch">
+                    <label for="theme-toggle" class="theme-switch-label">
+                        <i class="fas fa-sun"></i>
+                        <i class="fas fa-moon"></i>
+                        <span class="slider"></span>
+                    </label>
                 </div>
             </div>
-        </div>
+        </aside>
 
-        <!-- Main App -->
-        <div class="app-container">
-            <!-- Advanced Sidebar -->
-            <aside class="sidebar" id="sidebar">
-                <div class="sidebar-brand">
-                    <div class="brand-logo">
-                        <div class="logo-icon">
-                            <i class="fas fa-microphone-lines"></i>
-                        </div>
-                        <div class="brand-text">
-                            <h2>VoiceFlow</h2>
-                            <span>Pro Edition</span>
-                        </div>
-                    </div>
-                    <button class="sidebar-toggle" id="sidebar-toggle">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                </div>
-
-                <nav class="sidebar-menu">
-                    <div class="menu-section">
-                        <h3 class="menu-title">GŁÓWNE</h3>
-                        <a href="#" class="menu-item active" data-section="dashboard">
-                            <div class="menu-icon">
-                                <i class="fas fa-th-large"></i>
-                            </div>
-                            <span class="menu-text">Dashboard</span>
-                            <span class="menu-badge new">Nowe</span>
-                        </a>
-                        <a href="#" class="menu-item" data-section="editor">
-                            <div class="menu-icon">
-                                <i class="fas fa-edit"></i>
-                            </div>
-                            <span class="menu-text">Edytor tekstu</span>
-                        </a>
-                        <a href="#" class="menu-item" data-section="voices">
-                            <div class="menu-icon">
-                                <i class="fas fa-users"></i>
-                            </div>
-                            <span class="menu-text">Biblioteka głosów</span>
-                        </a>
-                    </div>
-
-                    <div class="menu-section">
-                        <h3 class="menu-title">NARZĘDZIA</h3>
-                        <a href="#" class="menu-item" data-section="pdf-converter">
-                            <div class="menu-icon">
-                                <i class="fas fa-file-pdf"></i>
-                            </div>
-                            <span class="menu-text">Konwerter PDF</span>
-                        </a>
-                        <a href="#" class="menu-item" data-section="batch">
-                            <div class="menu-icon">
-                                <i class="fas fa-layer-group"></i>
-                            </div>
-                            <span class="menu-text">Przetwarzanie wsadowe</span>
-                        </a>
-                        <a href="#" class="menu-item" data-section="history">
-                            <div class="menu-icon">
-                                <i class="fas fa-history"></i>
-                            </div>
-                            <span class="menu-text">Historia</span>
-                        </a>
-                    </div>
-
-                    <div class="menu-section">
-                        <h3 class="menu-title">USTAWIENIA</h3>
-                        <a href="#" class="menu-item" data-section="settings">
-                            <div class="menu-icon">
-                                <i class="fas fa-cog"></i>
-                            </div>
-                            <span class="menu-text">Preferencje</span>
-                        </a>
-                    </div>
-                </nav>
-
-                <div class="sidebar-footer">
-                    <div class="user-profile">
-                        <div class="user-avatar">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <div class="user-info">
-                            <p class="user-name">piotr20111</p>
-                            <p class="user-status">Premium</p>
-                        </div>
-                        <button class="user-menu-btn">
-                            <i class="fas fa-ellipsis-v"></i>
+        <main class="main-content">
+            <!-- Main Section -->
+            <section id="main-section" class="content-section active">
+                <header class="section-header">
+                    <h1>Zamiana tekstu na mowę</h1>
+                    <div class="header-actions">
+                        <button class="icon-btn" id="add-multiple-tabs" title="Dodaj wiele stron">
+                            <i class="fas fa-folder-plus"></i>
                         </button>
-                    </div>
-                </div>
-            </aside>
-
-            <!-- Main Content Area -->
-            <main class="main-content">
-                <!-- Top Bar -->
-                <header class="topbar">
-                    <div class="topbar-left">
-                        <button class="mobile-menu-btn" id="mobile-menu-btn">
-                            <i class="fas fa-bars"></i>
+                        <button class="icon-btn" id="export-all" title="Eksportuj wszystko">
+                            <i class="fas fa-download"></i>
                         </button>
-                        <h1 class="page-title">Dashboard</h1>
-                    </div>
-                    <div class="topbar-right">
-                        <button class="topbar-btn" id="quick-play">
-                            <i class="fas fa-play-circle"></i>
-                            <span>Szybkie odtwarzanie</span>
-                        </button>
-                        <button class="topbar-btn notification-btn" id="notification-btn">
-                            <i class="fas fa-bell"></i>
-                            <span class="notification-dot"></span>
-                        </button>
-                        <div class="theme-switcher">
-                            <button class="theme-btn" id="theme-light">
-                                <i class="fas fa-sun"></i>
-                            </button>
-                            <button class="theme-btn active" id="theme-dark">
-                                <i class="fas fa-moon"></i>
-                            </button>
-                            <button class="theme-btn" id="theme-auto">
-                                <i class="fas fa-adjust"></i>
-                            </button>
-                        </div>
                     </div>
                 </header>
 
-                <!-- Dashboard Section -->
-                <section id="dashboard-section" class="content-section active">
-                    <div class="dashboard-grid">
-                        <!-- Stats Cards -->
-                        <div class="stats-row">
-                            <div class="stat-card">
-                                <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="quick-settings">
+                    <div class="setting-item">
+                        <label><i class="fas fa-language"></i> Język:</label>
+                        <select id="language-filter">
+                            <option value="all">Wszystkie</option>
+                            <option value="pl">Polski</option>
+                            <option value="en">Angielski</option>
+                            <option value="de">Niemiecki</option>
+                            <option value="fr">Francuski</option>
+                            <option value="es">Hiszpański</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label><i class="fas fa-tachometer-alt"></i> Prędkość:</label>
+                        <input type="range" id="rate" min="0.5" max="2" step="0.1" value="1">
+                        <span id="rate-value">1.0x</span>
+                    </div>
+                    <div class="setting-item">
+                        <label><i class="fas fa-music"></i> Ton:</label>
+                        <input type="range" id="pitch" min="0.5" max="2" step="0.1" value="1">
+                        <span id="pitch-value">1.0</span>
+                    </div>
+                </div>
+
+                <div class="tabs-wrapper">
+                    <div class="tabs-header">
+                        <div class="tabs-list-wrapper">
+                            <ul id="tabs-list" class="tabs-list">
+                                <li class="tab-item active" data-tab="tab-1">
                                     <i class="fas fa-file-alt"></i>
-                                </div>
-                                <div class="stat-content">
-                                    <h3>Dokumenty</h3>
-                                    <p class="stat-number" id="stat-documents">0</p>
-                                    <p class="stat-change positive">+12% od zeszłego miesiąca</p>
-                                </div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                                    <i class="fas fa-clock"></i>
-                                </div>
-                                <div class="stat-content">
-                                    <h3>Czas czytania</h3>
-                                    <p class="stat-number" id="stat-reading-time">0h</p>
-                                    <p class="stat-change">Dzisiaj: <span id="today-reading">0 min</span></p>
-                                </div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                                    <i class="fas fa-microphone"></i>
-                                </div>
-                                <div class="stat-content">
-                                    <h3>Ulubione głosy</h3>
-                                    <p class="stat-number" id="stat-voices">0</p>
-                                    <p class="stat-change"><span id="voice-langs">Brak danych</span></p>
-                                </div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
-                                    <i class="fas fa-chart-line"></i>
-                                </div>
-                                <div class="stat-content">
-                                    <h3>Produktywność</h3>
-                                    <p class="stat-number" id="stat-productivity">0%</p>
-                                    <p class="stat-change positive">+5% wydajności</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Recent Files -->
-                        <div class="dashboard-panel recent-files">
-                            <div class="panel-header">
-                                <h2><i class="fas fa-clock"></i> Ostatnie pliki</h2>
-                                <button class="panel-action" onclick="app.showAllFiles()">Zobacz wszystkie</button>
-                            </div>
-                            <div class="files-list" id="recent-files-list">
-                                <p class="empty-state">Brak ostatnich plików</p>
-                            </div>
-                        </div>
-
-                        <!-- Quick Actions -->
-                        <div class="dashboard-panel quick-actions">
-                            <div class="panel-header">
-                                <h2><i class="fas fa-bolt"></i> Szybkie akcje</h2>
-                            </div>
-                            <div class="actions-grid">
-                                <button class="quick-action-card" onclick="app.switchSection('editor')">
-                                    <i class="fas fa-plus-circle"></i>
-                                    <span>Nowy dokument</span>
-                                </button>
-                                <button class="quick-action-card" onclick="app.switchSection('pdf-converter')">
-                                    <i class="fas fa-file-import"></i>
-                                    <span>Importuj PDF</span>
-                                </button>
-                                <button class="quick-action-card" onclick="app.switchSection('voices')">
-                                    <i class="fas fa-user-voice"></i>
-                                    <span>Wybierz głos</span>
-                                </button>
-                                <button class="quick-action-card" onclick="app.showSettings()">
-                                    <i class="fas fa-sliders-h"></i>
-                                    <span>Ustawienia</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Reading Progress Chart -->
-                        <div class="dashboard-panel chart-panel">
-                            <div class="panel-header">
-                                <h2><i class="fas fa-chart-bar"></i> Postęp czytania</h2>
-                            </div>
-                            <div class="chart-container" id="reading-chart">
-                                <canvas id="progress-chart"></canvas>
-                            </div>
+                                    <span>Strona 1</span>
+                                    <button class="close-tab" style="display: none;">×</button>
+                                </li>
+                            </ul>
+                            <button id="add-tab" class="add-tab-btn" title="Dodaj nową stronę">
+                                <i class="fas fa-plus"></i>
+                            </button>
                         </div>
                     </div>
-                </section>
 
-                <!-- Editor Section -->
-                <section id="editor-section" class="content-section">
-                    <div class="editor-container">
-                        <div class="editor-header">
-                            <div class="tabs-container">
-                                <div class="tabs-scroll">
-                                    <ul class="editor-tabs" id="editor-tabs">
-                                        <li class="tab active" data-tab="tab-1">
-                                            <i class="fas fa-file-alt"></i>
-                                            <span>Dokument 1</span>
-                                            <button class="tab-close">×</button>
-                                        </li>
-                                    </ul>
-                                    <button class="add-tab-btn" id="add-tab">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
+                    <div class="tabs-content">
+                        <div id="tab-1" class="tab-pane active">
                             <div class="editor-toolbar">
-                                <div class="toolbar-group">
-                                    <button class="toolbar-btn" title="Pogrubienie" data-action="bold">
-                                        <i class="fas fa-bold"></i>
-                                    </button>
-                                    <button class="toolbar-btn" title="Kursywa" data-action="italic">
-                                        <i class="fas fa-italic"></i>
-                                    </button>
-                                    <button class="toolbar-btn" title="Podkreślenie" data-action="underline">
-                                        <i class="fas fa-underline"></i>
-                                    </button>
-                                </div>
+                                <button class="toolbar-btn" data-action="bold"><i class="fas fa-bold"></i></button>
+                                <button class="toolbar-btn" data-action="italic"><i class="fas fa-italic"></i></button>
+                                <button class="toolbar-btn" data-action="clear"><i class="fas fa-eraser"></i></button>
                                 <div class="toolbar-separator"></div>
-                                <div class="toolbar-group">
-                                    <button class="toolbar-btn" title="Lista numerowana" data-action="list-ol">
-                                        <i class="fas fa-list-ol"></i>
-                                    </button>
-                                    <button class="toolbar-btn" title="Lista punktowana" data-action="list-ul">
-                                        <i class="fas fa-list-ul"></i>
-                                    </button>
-                                </div>
+                                <button class="toolbar-btn" data-action="copy"><i class="fas fa-copy"></i></button>
+                                <button class="toolbar-btn" data-action="paste"><i class="fas fa-paste"></i></button>
                                 <div class="toolbar-separator"></div>
-                                <div class="toolbar-group">
-                                    <button class="toolbar-btn" title="Cofnij" data-action="undo">
-                                        <i class="fas fa-undo"></i>
-                                    </button>
-                                    <button class="toolbar-btn" title="Ponów" data-action="redo">
-                                        <i class="fas fa-redo"></i>
-                                    </button>
-                                </div>
-                                <div class="toolbar-group ml-auto">
-                                    <span class="word-count">0 słów</span>
-                                    <span class="char-count">0 znaków</span>
-                                </div>
+                                <span class="char-count">0 znaków</span>
                             </div>
-                        </div>
-                        
-                        <div class="editor-body">
-                            <div id="tab-1" class="editor-content active">
-                                <textarea class="text-editor" placeholder="Zacznij pisać lub wklej tekst tutaj..."></textarea>
-                            </div>
-                        </div>
-
-                        <div class="editor-footer">
-                            <div class="voice-controls">
-                                <div class="control-group">
-                                    <label><i class="fas fa-user-voice"></i> Głos</label>
-                                    <select id="editor-voice-select" class="modern-select"></select>
-                                </div>
-                                <div class="control-group">
-                                    <label><i class="fas fa-tachometer-alt"></i> Prędkość</label>
-                                    <div class="range-slider">
-                                        <input type="range" id="editor-rate" min="0.5" max="2" step="0.1" value="1">
-                                        <span class="range-value">1.0x</span>
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label><i class="fas fa-music"></i> Ton</label>
-                                    <div class="range-slider">
-                                        <input type="range" id="editor-pitch" min="0.5" max="2" step="0.1" value="1">
-                                        <span class="range-value">1.0</span>
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label><i class="fas fa-volume-up"></i> Głośność</label>
-                                    <div class="range-slider">
-                                        <input type="range" id="editor-volume" min="0" max="1" step="0.1" value="1">
-                                        <span class="range-value">100%</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="playback-controls">
-                                <button class="play-btn primary" id="play-current">
-                                    <i class="fas fa-play"></i>
-                                    <span>Odtwórz</span>
+                            <textarea class="text-input" placeholder="Wpisz lub wklej tekst tutaj..."></textarea>
+                            <div class="tab-controls">
+                                <button class="control-btn primary" data-action="read-tab">
+                                    <i class="fas fa-play"></i> Czytaj tę stronę
                                 </button>
-                                <button class="play-btn" id="pause-btn">
-                                    <i class="fas fa-pause"></i>
-                                    <span>Pauza</span>
+                                <button class="control-btn" data-action="pause-tab">
+                                    <i class="fas fa-pause"></i> Pauza
                                 </button>
-                                <button class="play-btn danger" id="stop-btn">
-                                    <i class="fas fa-stop"></i>
-                                    <span>Stop</span>
-                                </button>
-                                <button class="play-btn success" id="play-all">
-                                    <i class="fas fa-play-circle"></i>
-                                    <span>Czytaj wszystko</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Progress Bar -->
-                        <div class="playback-progress" id="playback-progress">
-                            <div class="progress-info">
-                                <span id="progress-status">Gotowy</span>
-                                <span id="progress-time">00:00 / 00:00</span>
-                            </div>
-                            <div class="progress-bar-container">
-                                <div class="progress-bar-fill" id="progress-fill"></div>
-                                <div class="progress-marker" id="progress-marker"></div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- PDF Converter Section -->
-                <section id="pdf-converter-section" class="content-section">
-                    <div class="pdf-converter">
-                        <div class="converter-header">
-                            <h2>Zaawansowany konwerter PDF</h2>
-                            <p>Przekształć dokumenty PDF w tekst z zachowaniem formatowania</p>
-                        </div>
-
-                        <div class="upload-zone" id="pdf-upload-zone">
-                            <div class="upload-icon">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                            </div>
-                            <h3>Przeciągnij pliki PDF tutaj</h3>
-                            <p>lub</p>
-                            <button class="upload-btn">
-                                <i class="fas fa-folder-open"></i>
-                                Wybierz pliki
-                            </button>
-                            <input type="file" id="pdf-file-input" accept=".pdf" multiple hidden>
-                            <div class="upload-info">
-                                <p>Obsługiwane formaty: PDF</p>
-                                <p>Bez limitu rozmiaru i ilości plików</p>
-                            </div>
-                        </div>
-
-                        <div class="pdf-processing" id="pdf-processing" style="display: none;">
-                            <div class="processing-header">
-                                <h3>Przetwarzanie dokumentów</h3>
-                                <button class="cancel-processing-btn" onclick="app.cancelProcessing()">
-                                    <i class="fas fa-times"></i> Anuluj
-                                </button>
-                            </div>
-                            <div class="processing-list" id="processing-list"></div>
-                        </div>
-
-                        <div class="pdf-results" id="pdf-results" style="display: none;">
-                            <div class="results-header">
-                                <h3>Wyniki konwersji</h3>
-                                <div class="results-actions">
-                                    <button class="result-action-btn" onclick="app.importAllPDFs()">
-                                        <i class="fas fa-file-import"></i> Importuj wszystkie
-                                    </button>
-                                    <button class="result-action-btn" onclick="app.clearPDFResults()">
-                                        <i class="fas fa-trash"></i> Wyczyść
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="results-list" id="results-list"></div>
-                        </div>
-
-                        <div class="converter-features">
-                            <h3>Funkcje konwertera</h3>
-                            <div class="features-grid">
-                                <div class="feature-card">
-                                    <i class="fas fa-text-height"></i>
-                                    <h4>Zachowanie formatowania</h4>
-                                    <p>Utrzymuje strukturę tekstu, akapity i odstępy</p>
-                                </div>
-                                <div class="feature-card">
-                                    <i class="fas fa-language"></i>
-                                    <h4>Wielojęzyczność</h4>
-                                    <p>Obsługa dokumentów w różnych językach i alfabetach</p>
-                                </div>
-                                <div class="feature-card">
-                                    <i class="fas fa-shield-alt"></i>
-                                    <h4>Pliki zabezpieczone</h4>
-                                    <p>Obsługa plików chronionych hasłem z autoryzacją</p>
-                                </div>
-                                <div class="feature-card">
-                                    <i class="fas fa-infinity"></i>
-                                    <h4>Bez limitów</h4>
-                                    <p>Nieograniczona liczba i rozmiar plików</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Batch Processing Section -->
-                <section id="batch-section" class="content-section">
-                    <div class="batch-container">
-                        <div class="batch-header">
-                            <h2>Przetwarzanie wsadowe</h2>
-                            <p>Przetwarzaj wiele dokumentów jednocześnie</p>
-                        </div>
-
-                        <div class="batch-upload">
-                            <div class="batch-drop-zone" id="batch-drop-zone">
-                                <i class="fas fa-folder-open"></i>
-                                <h3>Przeciągnij folder lub wiele plików</h3>
-                                <button class="batch-select-btn">Wybierz pliki</button>
-                                <input type="file" id="batch-file-input" multiple accept=".txt,.pdf,.docx" hidden>
-                            </div>
-                        </div>
-
-                        <div class="batch-queue" id="batch-queue" style="display: none;">
-                            <h3>Kolejka przetwarzania</h3>
-                            <div class="queue-list" id="queue-list"></div>
-                            <div class="batch-actions">
-                                <button class="batch-btn primary" onclick="app.startBatchProcessing()">
-                                    <i class="fas fa-play"></i> Rozpocznij przetwarzanie
-                                </button>
-                                <button class="batch-btn" onclick="app.clearBatchQueue()">
-                                    <i class="fas fa-trash"></i> Wyczyść kolejkę
+                                <button class="control-btn danger" data-action="stop-tab">
+                                    <i class="fas fa-stop"></i> Stop
                                 </button>
                             </div>
                         </div>
                     </div>
-                </section>
+                </div>
 
-                <!-- History Section -->
-                <section id="history-section" class="content-section">
-                    <div class="history-container">
-                        <div class="history-header">
-                            <h2>Historia</h2>
-                            <div class="history-filters">
-                                <select id="history-filter" class="filter-select">
-                                    <option value="all">Wszystkie</option>
-                                    <option value="today">Dzisiaj</option>
-                                    <option value="week">Ten tydzień</option>
-                                    <option value="month">Ten miesiąc</option>
-                                </select>
-                                <button class="clear-history-btn" onclick="app.clearHistory()">
-                                    <i class="fas fa-trash"></i> Wyczyść historię
-                                </button>
-                            </div>
+                <div class="global-controls">
+                    <div class="controls-group">
+                        <button id="read-all" class="control-btn primary large">
+                            <i class="fas fa-play-circle"></i> Czytaj wszystkie strony
+                        </button>
+                        <button id="pause-resume" class="control-btn large">
+                            <i class="fas fa-pause-circle"></i> Pauza
+                        </button>
+                        <button id="stop-all" class="control-btn danger large">
+                            <i class="fas fa-stop-circle"></i> Stop
+                        </button>
+                    </div>
+                    <div class="status-bar">
+                        <div class="status-info">
+                            <span id="status-message">Gotowy do czytania</span>
+                            <span id="time-elapsed">00:00</span>
                         </div>
-
-                        <div class="history-list" id="history-list">
-                            <p class="empty-state">Brak historii</p>
+                        <div class="progress-bar">
+                            <div id="progress" class="progress-fill"></div>
                         </div>
                     </div>
-                </section>
+                </div>
+            </section>
 
-                <!-- Voices Section -->
-                <section id="voices-section" class="content-section">
-                    <div class="voices-manager">
-                        <div class="voices-header">
-                            <h2>Biblioteka głosów</h2>
-                            <div class="voices-filters">
-                                <select id="voice-language-filter" class="filter-select">
-                                    <option value="all">Wszystkie języki</option>
-                                    <option value="pl">Polski</option>
-                                    <option value="en">Angielski</option>
-                                    <option value="de">Niemiecki</option>
-                                    <option value="fr">Francuski</option>
-                                    <option value="es">Hiszpański</option>
-                                </select>
-                                <select id="voice-quality-filter" class="filter-select">
-                                    <option value="all">Wszystkie jakości</option>
-                                    <option value="premium">Premium</option>
-                                    <option value="standard">Standard</option>
-                                    <option value="basic">Basic</option>
-                                </select>
-                                <button class="refresh-voices-btn" onclick="app.refreshVoices()">
-                                    <i class="fas fa-sync"></i> Odśwież
-                                </button>
-                            </div>
+            <!-- Voices Section -->
+            <section id="voices-section" class="content-section">
+                <header class="section-header">
+                    <h1>Dostępne głosy</h1>
+                </header>
+                
+                <div class="voices-grid" id="voices-grid">
+                    <!-- Voices will be populated dynamically -->
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings-section" class="content-section">
+                <header class="section-header">
+                    <h1>Ustawienia</h1>
+                </header>
+                
+                <div class="settings-container">
+                    <div class="settings-group">
+                        <h3><i class="fas fa-microphone"></i> Ustawienia głosu</h3>
+                        <div class="setting-row">
+                            <label>Domyślny głos:</label>
+                            <select id="default-voice-select"></select>
                         </div>
-
-                        <div class="voices-showcase" id="voices-showcase">
-                            <!-- Voice cards will be dynamically generated -->
-                        </div>
-
-                        <div class="voice-preview-panel" id="voice-preview-panel" style="display: none;">
-                            <h3>Podgląd głosu</h3>
-                            <div class="preview-content">
-                                <div class="preview-info">
-                                    <h4 id="preview-voice-name"></h4>
-                                    <p id="preview-voice-details"></p>
-                                </div>
-                                <textarea id="preview-text" placeholder="Wpisz tekst do przetestowania głosu...">Cześć! To jest przykładowy tekst do przetestowania wybranego głosu. Możesz wpisać własny tekst, aby sprawdzić jak brzmi.</textarea>
-                                <div class="preview-controls">
-                                    <button class="preview-btn" onclick="app.testSelectedVoice()">
-                                        <i class="fas fa-play"></i> Testuj głos
-                                    </button>
-                                    <button class="preview-btn primary" onclick="app.setAsDefault()">
-                                        <i class="fas fa-star"></i> Ustaw jako domyślny
-                                    </button>
-                                </div>
-                            </div>
+                        <div class="setting-row">
+                            <label>Głośność:</label>
+                            <input type="range" id="volume" min="0" max="1" step="0.1" value="1">
+                            <span id="volume-value">100%</span>
                         </div>
                     </div>
-                </section>
 
-                <!-- Settings Section -->
-                <section id="settings-section" class="content-section">
-                    <div class="settings-container">
-                        <div class="settings-header">
-                            <h2>Ustawienia aplikacji</h2>
+                    <div class="settings-group">
+                        <h3><i class="fas fa-save"></i> Automatyczny zapis</h3>
+                        <div class="setting-row">
+                            <label>
+                                <input type="checkbox" id="auto-save" checked>
+                                Automatycznie zapisuj treść
+                            </label>
                         </div>
-
-                        <div class="settings-tabs">
-                            <button class="settings-tab active" data-tab="general">
-                                <i class="fas fa-cog"></i> Ogólne
-                            </button>
-                            <button class="settings-tab" data-tab="audio">
-                                <i class="fas fa-volume-up"></i> Audio
-                            </button>
-                            <button class="settings-tab" data-tab="shortcuts">
-                                <i class="fas fa-keyboard"></i> Skróty
-                            </button>
-                            <button class="settings-tab" data-tab="advanced">
-                                <i class="fas fa-tools"></i> Zaawansowane
+                        <div class="setting-row">
+                            <button class="control-btn" id="clear-storage">
+                                <i class="fas fa-trash"></i> Wyczyść zapisane dane
                             </button>
                         </div>
+                    </div>
 
-                        <div class="settings-content">
-                            <!-- General Settings -->
-                            <div class="settings-panel active" id="general-settings">
-                                <div class="setting-group">
-                                    <h3>Wygląd</h3>
-                                    <div class="setting-item">
-                                        <div class="setting-label">
-                                            <span>Motyw kolorystyczny</span>
-                                            <small>Wybierz preferowany schemat kolorów</small>
-                                        </div>
-                                        <div class="setting-control">
-                                            <select class="setting-select" id="theme-select">
-                                                <option value="dark">Ciemny</option>
-                                                <option value="light">Jasny</option>
-                                                <option value="auto">Automatyczny</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="setting-item">
-                                        <div class="setting-label">
-                                            <span>Kompaktowy widok</span>
-                                            <small>Zmniejsz odstępy dla więcej treści</small>
-                                        </div>
-                                        <div class="setting-control">
-                                            <label class="toggle-switch">
-                                                <input type="checkbox" id="compact-view">
-                                                <span class="toggle-slider"></span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="setting-group">
-                                    <h3>Zachowanie</h3>
-                                    <div class="setting-item">
-                                        <div class="setting-label">
-                                            <span>Automatyczny zapis</span>
-                                            <small>Zapisuj dokumenty automatycznie</small>
-                                        </div>
-                                        <div class="setting-control">
-                                            <label class="toggle-switch">
-                                                <input type="checkbox" id="auto-save-toggle" checked>
-                                                <span class="toggle-slider"></span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="setting-item">
-                                        <div class="setting-label">
-                                            <span>Interwał zapisu</span>
-                                            <small>Częstotliwość automatycznego zapisu</small>
-                                        </div>
-                                        <div class="setting-control">
-                                            <select class="setting-select" id="save-interval">
-                                                <option value="30">Co 30 sekund</option>
-                                                <option value="60">Co minutę</option>
-                                                <option value="300">Co 5 minut</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
+                    <div class="settings-group">
+                        <h3><i class="fas fa-keyboard"></i> Skróty klawiszowe</h3>
+                        <div class="shortcuts-list">
+                            <div class="shortcut-item">
+                                <kbd>Ctrl + Space</kbd>
+                                <span>Odtwórz/Pauza</span>
                             </div>
-
-                            <!-- Audio Settings -->
-                            <div class="settings-panel" id="audio-settings">
-                                <div class="setting-group">
-                                    <h3>Parametry audio</h3>
-                                    <div class="setting-item">
-                                        <div class="setting-label">
-                                            <span>Domyślna głośność</span>
-                                            <small>Ustaw poziom głośności dla nowych sesji</small>
-                                        </div>
-                                        <div class="setting-control">
-                                            <div class="volume-slider">
-                                                <input type="range" id="default-volume" min="0" max="100" value="80">
-                                                <span class="volume-value">80%</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="setting-item">
-                                        <div class="setting-label">
-                                            <span>Pauzy między zdaniami</span>
-                                            <small>Dodaj naturalne przerwy w czytaniu</small>
-                                        </div>
-                                        <div class="setting-control">
-                                            <label class="toggle-switch">
-                                                <input type="checkbox" id="sentence-pause" checked>
-                                                <span class="toggle-slider"></span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="setting-item">
-                                        <div class="setting-label">
-                                            <span>Długość pauzy (ms)</span>
-                                            <small>Czas przerwy między zdaniami</small>
-                                        </div>
-                                        <div class="setting-control">
-                                            <input type="number" id="pause-length" value="500" min="100" max="2000" step="100">
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="shortcut-item">
+                                <kbd>Ctrl + S</kbd>
+                                <span>Zapisz wszystko</span>
                             </div>
-
-                            <!-- Shortcuts Settings -->
-                            <div class="settings-panel" id="shortcuts-settings">
-                                <div class="setting-group">
-                                    <h3>Skróty klawiszowe</h3>
-                                    <div class="shortcuts-list">
-                                        <div class="shortcut-item">
-                                            <kbd>Ctrl + Space</kbd>
-                                            <span>Odtwórz/Pauza</span>
-                                        </div>
-                                        <div class="shortcut-item">
-                                            <kbd>Ctrl + S</kbd>
-                                            <span>Zapisz wszystko</span>
-                                        </div>
-                                        <div class="shortcut-item">
-                                            <kbd>Ctrl + T</kbd>
-                                            <span>Nowa karta</span>
-                                        </div>
-                                        <div class="shortcut-item">
-                                            <kbd>Ctrl + W</kbd>
-                                            <span>Zamknij kartę</span>
-                                        </div>
-                                        <div class="shortcut-item">
-                                            <kbd>Ctrl + O</kbd>
-                                            <span>Otwórz plik</span>
-                                        </div>
-                                        <div class="shortcut-item">
-                                            <kbd>Escape</kbd>
-                                            <span>Zatrzymaj czytanie</span>
-                                        </div>
-                                        <div class="shortcut-item">
-                                            <kbd>F11</kbd>
-                                            <span>Pełny ekran</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Advanced Settings -->
-                            <div class="settings-panel" id="advanced-settings">
-                                <div class="setting-group">
-                                    <h3>Zaawansowane</h3>
-                                    <div class="setting-item">
-                                        <div class="setting-label">
-                                            <span>Tryb debugowania</span>
-                                            <small>Pokazuj szczegółowe logi w konsoli</small>
-                                        </div>
-                                        <div class="setting-control">
-                                            <label class="toggle-switch">
-                                                <input type="checkbox" id="debug-mode">
-                                                <span class="toggle-slider"></span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="setting-item">
-                                        <div class="setting-label">
-                                            <span>Eksportuj dane</span>
-                                            <small>Pobierz wszystkie zapisane dane</small>
-                                        </div>
-                                        <div class="setting-control">
-                                            <button class="control-btn" onclick="app.exportData()">
-                                                <i class="fas fa-download"></i> Eksportuj
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="setting-item">
-                                        <div class="setting-label">
-                                            <span>Importuj dane</span>
-                                            <small>Przywróć dane z kopii zapasowej</small>
-                                        </div>
-                                        <div class="setting-control">
-                                            <button class="control-btn" onclick="app.importData()">
-                                                <i class="fas fa-upload"></i> Importuj
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="setting-item">
-                                        <div class="setting-label">
-                                            <span>Resetuj ustawienia</span>
-                                            <small>Przywróć domyślne ustawienia aplikacji</small>
-                                        </div>
-                                        <div class="setting-control">
-                                            <button class="control-btn danger" onclick="app.resetSettings()">
-                                                <i class="fas fa-undo"></i> Resetuj
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="shortcut-item">
+                                <kbd>Ctrl + T</kbd>
+                                <span>Nowa strona</span>
                             </div>
                         </div>
                     </div>
-                </section>
-            </main>
-        </div>
+                </div>
+            </section>
 
-        <!-- Floating Action Button -->
-        <div class="fab-container">
-            <button class="fab" id="fab-main">
-                <i class="fas fa-plus"></i>
-            </button>
-            <div class="fab-menu">
-                <button class="fab-item" title="Nowy dokument">
-                    <i class="fas fa-file-alt"></i>
-                </button>
-                <button class="fab-item" title="Import PDF">
-                    <i class="fas fa-file-pdf"></i>
-                </button>
-                <button class="fab-item" title="Nagrywanie">
-                    <i class="fas fa-microphone"></i>
-                </button>
-            </div>
-        </div>
+            <!-- Import Section -->
+            <section id="import-section" class="content-section">
+                <header class="section-header">
+                    <h1>Import plików</h1>
+                </header>
+                
+                <div class="import-container">
+                    <div class="drop-zone" id="drop-zone">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h3>Przeciągnij i upuść pliki tutaj</h3>
+                        <p>lub</p>
+                        <button class="control-btn primary" id="file-select-btn">
+                            <i class="fas fa-folder-open"></i> Wybierz pliki
+                        </button>
+                        <input type="file" id="file-input" accept=".txt,.pdf" multiple hidden>
+                        <p class="file-types">Obsługiwane formaty: TXT, PDF</p>
+                    </div>
 
-        <!-- Toast Notifications Container -->
-        <div class="toast-container" id="toast-container"></div>
+                    <div class="imported-files" id="imported-files" style="display: none;">
+                        <h3>Zaimportowane pliki:</h3>
+                        <ul id="files-list"></ul>
+                    </div>
+                </div>
+            </section>
+        </main>
 
-        <!-- Context Menu -->
-        <div class="context-menu" id="context-menu">
-            <div class="context-item" data-action="cut">
-                <i class="fas fa-cut"></i> Wytnij
-            </div>
-            <div class="context-item" data-action="copy">
-                <i class="fas fa-copy"></i> Kopiuj
-            </div>
-            <div class="context-item" data-action="paste">
-                <i class="fas fa-paste"></i> Wklej
-            </div>
-            <div class="context-separator"></div>
-            <div class="context-item" data-action="select-all">
-                <i class="fas fa-check-double"></i> Zaznacz wszystko
+        <!-- Add Multiple Tabs Modal -->
+        <div id="add-multiple-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Dodaj wiele stron</h2>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Liczba stron do dodania:</label>
+                        <input type="number" id="num-tabs" min="1" max="20" value="3">
+                    </div>
+                    <div class="form-group">
+                        <label>Prefiks nazwy:</label>
+                        <input type="text" id="tab-prefix" value="Strona" placeholder="np. Rozdział">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="add-sample-text">
+                            Dodaj przykładowy tekst
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="control-btn" onclick="closeModal()">Anuluj</button>
+                    <button class="control-btn primary" id="confirm-add-tabs">Dodaj strony</button>
+                </div>
             </div>
         </div>
     </div>
